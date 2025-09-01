@@ -2,6 +2,7 @@
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { CURRENCIES } from '@/constants/settingsConstants';
+import { useThemeColor } from '@/hooks/useThemeColor';
 import React from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
@@ -14,6 +15,9 @@ export const CurrencySetting: React.FC<CurrencySettingProps> = ({
   selectedCurrency,
   onCurrencyPress,
 }) => {
+  const cardBackgroundColor = useThemeColor({}, "cardBackgroundColor");
+  const styles = createStyles(cardBackgroundColor);
+
   const currentCurrency = CURRENCIES.find(c => c.code === selectedCurrency);
 
   return (
@@ -32,7 +36,7 @@ export const CurrencySetting: React.FC<CurrencySettingProps> = ({
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (cardBackgroundColor: string) => StyleSheet.create({
   settingSection: {
     marginBottom: 30,
   },
@@ -47,7 +51,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 20,
     borderRadius: 12,
-    backgroundColor: 'rgba(128, 128, 128, 0.1)',
+    backgroundColor: cardBackgroundColor,
   },
   settingInfo: {
     flexDirection: 'row',

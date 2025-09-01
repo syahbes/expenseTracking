@@ -2,6 +2,7 @@
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useTheme } from '@/context/ThemeContext';
+import { useThemeColor } from '@/hooks/useThemeColor';
 import React from 'react';
 import { ActivityIndicator, StyleSheet, TouchableOpacity } from 'react-native';
 
@@ -12,6 +13,9 @@ export const ThemeSetting: React.FC = () => {
     const newTheme = theme === 'light' ? 'dark' : 'light';
     await setTheme(newTheme);
   };
+
+  const cardBackgroundColor = useThemeColor({}, 'cardBackgroundColor');
+  const styles = createStyles(cardBackgroundColor);
 
   if (isLoading) {
     return (
@@ -45,7 +49,7 @@ export const ThemeSetting: React.FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (cardBackgroundColor: string) => StyleSheet.create({
   settingSection: {
     marginBottom: 30,
   },
@@ -60,7 +64,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 20,
     borderRadius: 12,
-    backgroundColor: 'rgba(128, 128, 128, 0.1)',
+    backgroundColor: cardBackgroundColor,
   },
   loadingItem: {
     justifyContent: 'center',

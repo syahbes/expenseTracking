@@ -27,10 +27,11 @@ export const CurrencyModal: React.FC<CurrencyModalProps> = ({
 }) => {
   // Theme-aware colors
   const backgroundColor = useThemeColor({}, 'background');
+  const cardBackgroundColor = useThemeColor({}, 'cardBackgroundColor');
   const textColor = useThemeColor({}, 'text');
   const tintColor = useThemeColor({}, 'tint');
 
-  const styles = createStyles(backgroundColor, textColor, tintColor);
+  const styles = createStyles(backgroundColor, cardBackgroundColor, textColor, tintColor);
 
   const renderCurrencyItem = ({ item }: { item: Currency }) => (
     <TouchableOpacity
@@ -76,7 +77,7 @@ export const CurrencyModal: React.FC<CurrencyModalProps> = ({
   );
 };
 
-const createStyles = (backgroundColor: string, textColor: string, tintColor: string) => StyleSheet.create({
+const createStyles = (backgroundColor: string, cardBackgroundColor: string, tintColor: string, text: string) => StyleSheet.create({
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
@@ -111,10 +112,10 @@ const createStyles = (backgroundColor: string, textColor: string, tintColor: str
     paddingHorizontal: 20,
     borderRadius: 12,
     marginBottom: 8,
-    backgroundColor: textColor + '08', // Very light overlay using text color
+    backgroundColor: cardBackgroundColor,
   },
   selectedCurrencyItem: {
-    backgroundColor: tintColor + '20', // Semi-transparent tint color for selection
+    backgroundColor: tintColor + '40', // Semi-transparent tint color for selection
   },
   currencySymbol: {
     fontSize: 24,
@@ -123,6 +124,7 @@ const createStyles = (backgroundColor: string, textColor: string, tintColor: str
   },
   currencyInfo: {
     flex: 1,
+    backgroundColor: 'transparent',
   },
   currencyCode: {
     fontSize: 16,
