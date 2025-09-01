@@ -75,7 +75,7 @@ const createStyles = (cardBackgroundColor: string) =>
       backgroundColor: 'transparent',
     },
     settingIcon: {
-      fontSize: 24,
+      fontSize: 22,
       marginRight: 15,
     },
     settingLabel: {

@@ -14,7 +14,9 @@ interface CategoriesSectionProps {
 
 export const CategoriesSection: React.FC<CategoriesSectionProps> = ({ categories, onAddCategory, onDeleteCategory }) => {
   const cardBackgroundColor = useThemeColor({}, 'cardBackgroundColor');
-  const styles = createStyles(cardBackgroundColor);
+  const backgroundColor = useThemeColor({}, 'background');
+  const tint = useThemeColor({}, 'tint');
+  const styles = createStyles(cardBackgroundColor, backgroundColor, tint);
 
   const handleDeleteCategory = (categoryId: number, categoryName: string) => {
     Alert.alert('Delete Category', `Are you sure you want to delete "${categoryName}"?`, [
@@ -63,7 +65,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({ categories
   );
 };
 
-const createStyles = (cardBackgroundColor: string) =>
+const createStyles = (cardBackgroundColor: string, backgroundColor: string, tint: string) =>
   StyleSheet.create({
     settingSection: {
       marginBottom: 30,
@@ -80,11 +82,11 @@ const createStyles = (cardBackgroundColor: string) =>
     addButton: {
       paddingHorizontal: 15,
       paddingVertical: 8,
-      backgroundColor: '#007AFF',
+      backgroundColor: tint,
       borderRadius: 8,
     },
     addButtonText: {
-      color: 'white',
+      color: backgroundColor,
       fontWeight: '600',
     },
     categoryItem: {
@@ -114,6 +116,7 @@ const createStyles = (cardBackgroundColor: string) =>
     },
     deleteButtonText: {
       fontSize: 18,
+      color: 'white',
     },
     separator: {
       height: 8,
