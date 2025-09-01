@@ -1,3 +1,4 @@
+// components/ui/IconSymbol.tsx - Updated with new icon mappings
 // Fallback for using MaterialIcons on Android and web.
 
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
@@ -12,22 +13,26 @@ type IconSymbolName = keyof typeof MAPPING;
  * Add your SF Symbols to Material Icons mappings here.
  * - see Material Icons in the [Icons Directory](https://icons.expo.fyi). -- MaterialIcons
  * - see SF Symbols in the [SF Symbols](https://developer.apple.com/sf-symbols/) app.
- * - https://hotpot.ai/free-icons -- help with mapping names <SF ICONS NAME> : <MATERIAL ICON NAME> 
-*/
+ * - https://hotpot.ai/free-icons -- help with mapping names <SF ICONS NAME> : <MATERIAL ICON NAME>
+ */
 const MAPPING = {
-  'plus': 'add',
+  plus: 'add',
   'list.bullet': 'list',
   'chart.bar': 'bar-chart',
-  'gear': 'settings',
-  'trash': 'delete',
+  gear: 'settings',
+  trash: 'delete',
   'doc.text': 'content-paste',
   'chevron.down': 'keyboard-arrow-down',
   'chevron.up': 'keyboard-arrow-up',
-  'creditcard': 'credit-card',
-  'calendar': 'calendar-month',
-  'clock': 'access-time',
-  'checkmark.circle': 'check-circle-outline'
-
+  creditcard: 'credit-card',
+  calendar: 'calendar-month',
+  clock: 'access-time',
+  'checkmark.circle': 'check-circle-outline',
+  magnifyingglass: 'search',
+  'xmark.circle.fill': 'cancel',
+  'xmark.circle': 'highlight-off',
+  'line.horizontal.3.decrease.circle': 'filter-list',
+  pencil: 'edit',
 } as IconMapping;
 
 /**

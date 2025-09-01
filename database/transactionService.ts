@@ -1,4 +1,4 @@
-// database/transactionService.ts
+// database/transactionService.ts - Updated with edit support
 import { NewTransaction, Transaction } from '@/types/transaction';
 import { getDatabase } from './database';
 
@@ -27,6 +27,31 @@ export const addTransaction = async (transaction: NewTransaction): Promise<void>
   }
 };
 
+export const updateTransaction = async (id: number, transaction: NewTransaction): Promise<void> => {
+  try {
+    const db = getDatabase();
+
+    await db.runAsync(
+      `UPDATE transactions 
+       SET amount = ?, description = ?, categoryId = ?, type = ?, paymentMethod = ?, date = ?, time = ?
+       WHERE id = ?`,
+      [
+        transaction.amount,
+        transaction.description,
+        transaction.categoryId,
+        transaction.type,
+        transaction.paymentMethod,
+        transaction.date,
+        transaction.time,
+        id,
+      ]
+    );
+  } catch (error) {
+    console.error('Failed to update transaction:', error);
+    throw new Error('Failed to update transaction');
+  }
+};
+
 export const getTransactions = async (): Promise<Transaction[]> => {
   try {
     const db = getDatabase();
@@ -51,6 +76,17 @@ export const getTransactionsByDateRange = async (startDate: string, endDate: str
   } catch (error) {
     console.error('Failed to get transactions by date range:', error);
     return [];
+  }
+};
+
+export const getTransactionById = async (id: number): Promise<Transaction | null> => {
+  try {
+    const db = getDatabase();
+    const result = (await db.getFirstAsync('SELECT * FROM transactions WHERE id = ?', [id])) as Transaction | null;
+    return result;
+  } catch (error) {
+    console.error('Failed to get transaction:', error);
+    return null;
   }
 };
 
