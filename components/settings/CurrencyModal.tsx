@@ -2,13 +2,14 @@
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { CURRENCIES } from '@/constants/settingsConstants';
+import { useThemeColor } from '@/hooks/useThemeColor';
 import { Currency } from '@/types/settings';
 import React from 'react';
 import {
-    FlatList,
-    Modal,
-    StyleSheet,
-    TouchableOpacity,
+  FlatList,
+  Modal,
+  StyleSheet,
+  TouchableOpacity,
 } from 'react-native';
 
 interface CurrencyModalProps {
@@ -24,6 +25,13 @@ export const CurrencyModal: React.FC<CurrencyModalProps> = ({
   onSelectCurrency,
   onClose,
 }) => {
+  // Theme-aware colors
+  const backgroundColor = useThemeColor({}, 'background');
+  const textColor = useThemeColor({}, 'text');
+  const tintColor = useThemeColor({}, 'tint');
+
+  const styles = createStyles(backgroundColor, textColor, tintColor);
+
   const renderCurrencyItem = ({ item }: { item: Currency }) => (
     <TouchableOpacity
       style={[
@@ -68,7 +76,7 @@ export const CurrencyModal: React.FC<CurrencyModalProps> = ({
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (backgroundColor: string, textColor: string, tintColor: string) => StyleSheet.create({
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
@@ -78,7 +86,7 @@ const styles = StyleSheet.create({
   modalContent: {
     width: '90%',
     maxHeight: '80%',
-    backgroundColor: 'white',
+    backgroundColor: backgroundColor,
     borderRadius: 16,
     padding: 20,
   },
@@ -103,10 +111,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 12,
     marginBottom: 8,
-    backgroundColor: 'rgba(128, 128, 128, 0.05)',
+    backgroundColor: textColor + '08', // Very light overlay using text color
   },
   selectedCurrencyItem: {
-    backgroundColor: '#007AFF20',
+    backgroundColor: tintColor + '20', // Semi-transparent tint color for selection
   },
   currencySymbol: {
     fontSize: 24,

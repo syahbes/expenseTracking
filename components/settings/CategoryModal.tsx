@@ -1,12 +1,13 @@
 // components/settings/CategoryModal.tsx
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import { useThemeColor } from '@/hooks/useThemeColor';
 import React, { useState } from 'react';
 import {
-    Modal,
-    StyleSheet,
-    TextInput,
-    TouchableOpacity,
+  Modal,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
 } from 'react-native';
 
 interface CategoryModalProps {
@@ -23,6 +24,11 @@ export const CategoryModal: React.FC<CategoryModalProps> = ({
   const [categoryName, setCategoryName] = useState('');
   const [categoryIcon, setCategoryIcon] = useState('📁');
 
+  // Theme-aware colors
+  const backgroundColor = useThemeColor({}, 'background');
+  const textColor = useThemeColor({}, 'text');
+  const tintColor = useThemeColor({}, 'tint');
+
   const handleAddCategory = () => {
     if (categoryName.trim()) {
       onAddCategory(categoryName.trim(), categoryIcon);
@@ -37,6 +43,8 @@ export const CategoryModal: React.FC<CategoryModalProps> = ({
     setCategoryIcon('📁');
     onClose();
   };
+
+  const styles = createStyles(backgroundColor, textColor, tintColor);
 
   return (
     <Modal
@@ -61,6 +69,7 @@ export const CategoryModal: React.FC<CategoryModalProps> = ({
               value={categoryName}
               onChangeText={setCategoryName}
               placeholder="Enter category name"
+              placeholderTextColor={styles.placeholderColor.color}
               maxLength={50}
             />
             
@@ -70,6 +79,7 @@ export const CategoryModal: React.FC<CategoryModalProps> = ({
               value={categoryIcon}
               onChangeText={setCategoryIcon}
               placeholder="📁"
+              placeholderTextColor={styles.placeholderColor.color}
               maxLength={2}
             />
             
@@ -90,7 +100,7 @@ export const CategoryModal: React.FC<CategoryModalProps> = ({
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (backgroundColor: string, textColor: string, tintColor: string) => StyleSheet.create({
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
@@ -100,7 +110,7 @@ const styles = StyleSheet.create({
   modalContent: {
     width: '90%',
     maxHeight: '80%',
-    backgroundColor: 'white',
+    backgroundColor: backgroundColor,
     borderRadius: 16,
     padding: 20,
   },
@@ -125,25 +135,29 @@ const styles = StyleSheet.create({
   },
   textInput: {
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: textColor + '30', // Add transparency to text color for border
     borderRadius: 8,
     paddingHorizontal: 15,
     paddingVertical: 12,
     fontSize: 16,
-    backgroundColor: 'white',
+    backgroundColor: backgroundColor,
+    color: textColor,
+  },
+  placeholderColor: {
+    color: textColor + '60', // Semi-transparent text color for placeholder
   },
   saveButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: tintColor,
     borderRadius: 8,
     paddingVertical: 15,
     alignItems: 'center',
     marginTop: 10,
   },
   saveButtonDisabled: {
-    backgroundColor: '#ccc',
+    backgroundColor: textColor + '30', // Semi-transparent text color for disabled state
   },
   saveButtonText: {
-    color: 'white',
+    color: backgroundColor, // Use background color for contrast
     fontSize: 16,
     fontWeight: '600',
   },
