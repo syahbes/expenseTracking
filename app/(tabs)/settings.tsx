@@ -3,6 +3,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import React, { useEffect, useState } from 'react';
 import { Alert, ScrollView, StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 // Database services
 import { addCategory, deleteCategory, loadCategories } from '@/database/categoriesService';
@@ -45,11 +46,8 @@ export default function SettingsScreen() {
 
   const loadAppData = async () => {
     try {
-      const [settingsData, categoriesData] = await Promise.all([
-        loadSettings(),
-        loadCategories(),
-      ]);
-      
+      const [settingsData, categoriesData] = await Promise.all([loadSettings(), loadCategories()]);
+
       setCurrency(settingsData.currency);
       setCategories(categoriesData);
     } catch (error) {
@@ -98,37 +96,30 @@ export default function SettingsScreen() {
   }
 
   return (
-    <ThemedView style={styles.container}>
-      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
-        <ThemedText type="title" style={styles.title}>Settings</ThemedText>
+    <SafeAreaView style={styles.container} edges={['top']}>
+      <ThemedView style={styles.container}>
+        <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+          <ThemedText type="title" style={styles.title}>
+            Settings
+          </ThemedText>
 
-        <ThemeSetting />
+          <ThemeSetting />
 
-        <CurrencySetting
+          <CurrencySetting selectedCurrency={currency} onCurrencyPress={() => setShowCurrencyModal(true)} />
+
+          <CategoriesSection categories={categories} onAddCategory={() => setShowCategoryModal(true)} onDeleteCategory={handleDeleteCategory} />
+        </ScrollView>
+
+        <CurrencyModal
+          visible={showCurrencyModal}
           selectedCurrency={currency}
-          onCurrencyPress={() => setShowCurrencyModal(true)}
+          onSelectCurrency={handleCurrencySelect}
+          onClose={() => setShowCurrencyModal(false)}
         />
 
-        <CategoriesSection
-          categories={categories}
-          onAddCategory={() => setShowCategoryModal(true)}
-          onDeleteCategory={handleDeleteCategory}
-        />
-      </ScrollView>
-
-      <CurrencyModal
-        visible={showCurrencyModal}
-        selectedCurrency={currency}
-        onSelectCurrency={handleCurrencySelect}
-        onClose={() => setShowCurrencyModal(false)}
-      />
-
-      <CategoryModal
-        visible={showCategoryModal}
-        onAddCategory={handleAddCategory}
-        onClose={() => setShowCategoryModal(false)}
-      />
-    </ThemedView>
+        <CategoryModal visible={showCategoryModal} onAddCategory={handleAddCategory} onClose={() => setShowCategoryModal(false)} />
+      </ThemedView>
+    </SafeAreaView>
   );
 }
 

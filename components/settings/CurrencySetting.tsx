@@ -11,18 +11,17 @@ interface CurrencySettingProps {
   onCurrencyPress: () => void;
 }
 
-export const CurrencySetting: React.FC<CurrencySettingProps> = ({
-  selectedCurrency,
-  onCurrencyPress,
-}) => {
-  const cardBackgroundColor = useThemeColor({}, "cardBackgroundColor");
+export const CurrencySetting: React.FC<CurrencySettingProps> = ({ selectedCurrency, onCurrencyPress }) => {
+  const cardBackgroundColor = useThemeColor({}, 'cardBackgroundColor');
   const styles = createStyles(cardBackgroundColor);
 
   const currentCurrency = CURRENCIES.find(c => c.code === selectedCurrency);
 
   return (
     <ThemedView style={styles.settingSection}>
-      <ThemedText type="subtitle" style={styles.sectionTitle}>Currency</ThemedText>
+      <ThemedText type="subtitle" style={styles.sectionTitle}>
+        Currency
+      </ThemedText>
       <TouchableOpacity style={styles.settingItem} onPress={onCurrencyPress}>
         <ThemedView style={styles.settingInfo}>
           <ThemedText style={styles.settingIcon}>💱</ThemedText>
@@ -36,38 +35,39 @@ export const CurrencySetting: React.FC<CurrencySettingProps> = ({
   );
 };
 
-const createStyles = (cardBackgroundColor: string) => StyleSheet.create({
-  settingSection: {
-    marginBottom: 30,
-  },
-  sectionTitle: {
-    marginBottom: 15,
-    opacity: 0.8,
-  },
-  settingItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-    borderRadius: 12,
-    backgroundColor: cardBackgroundColor,
-  },
-  settingInfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'transparent',
-  },
-  settingIcon: {
-    fontSize: 24,
-    marginRight: 15,
-  },
-  settingLabel: {
-    fontSize: 16,
-    fontWeight: '500',
-  },
-  settingValue: {
-    fontSize: 16,
-    opacity: 0.7,
-  },
-});
+const createStyles = (cardBackgroundColor: string) =>
+  StyleSheet.create({
+    settingSection: {
+      marginBottom: 30,
+    },
+    sectionTitle: {
+      marginBottom: 15,
+      opacity: 0.8,
+    },
+    settingItem: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      paddingVertical: 15,
+      paddingHorizontal: 20,
+      borderRadius: 12,
+      backgroundColor: cardBackgroundColor,
+    },
+    settingInfo: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      backgroundColor: 'transparent',
+    },
+    settingIcon: {
+      fontSize: 24,
+      marginRight: 15,
+    },
+    settingLabel: {
+      fontSize: 16,
+      fontWeight: '500',
+    },
+    settingValue: {
+      fontSize: 16,
+      opacity: 0.7,
+    },
+  });
