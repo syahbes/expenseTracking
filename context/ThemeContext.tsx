@@ -29,10 +29,10 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   const loadThemeFromDatabase = async () => {
     try {
       setIsLoading(true);
-      
+
       // Initialize database first
       await initializeDatabase();
-      
+
       // Load theme from database
       const savedTheme = await getSetting('theme');
       if (savedTheme === 'light' || savedTheme === 'dark') {
@@ -54,7 +54,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     try {
       // Save to database first
       await updateSetting('theme', newTheme);
-      
+
       // Then update state
       setThemeState(newTheme);
     } catch (error) {
@@ -70,11 +70,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     isLoading,
   };
 
-  return (
-    <ThemeContext.Provider value={value}>
-      {children}
-    </ThemeContext.Provider>
-  );
+  return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
 };
 
 export const useTheme = () => {

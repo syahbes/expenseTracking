@@ -54,7 +54,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({ categories
 
       <FlatList
         data={categories}
-        keyExtractor={item => item.id.toString()}
+        keyExtractor={(item) => item.id.toString()}
         renderItem={renderCategoryItem}
         scrollEnabled={false}
         ItemSeparatorComponent={ItemSeparator}

@@ -1,4 +1,3 @@
-
 // constants/settingsConstants.ts
 import { Currency, NewCategory, Settings } from '@/types/settings';
 

@@ -15,7 +15,7 @@ export const CurrencySetting: React.FC<CurrencySettingProps> = ({ selectedCurren
   const cardBackgroundColor = useThemeColor({}, 'cardBackgroundColor');
   const styles = createStyles(cardBackgroundColor);
 
-  const currentCurrency = CURRENCIES.find(c => c.code === selectedCurrency);
+  const currentCurrency = CURRENCIES.find((c) => c.code === selectedCurrency);
 
   return (
     <ThemedView style={styles.settingSection}>

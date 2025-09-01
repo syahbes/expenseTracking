@@ -47,7 +47,7 @@ export const CurrencyModal: React.FC<CurrencyModalProps> = ({ visible, selectedC
             </TouchableOpacity>
           </ThemedView>
 
-          <FlatList data={CURRENCIES} keyExtractor={item => item.code} renderItem={renderCurrencyItem} style={styles.modalList} />
+          <FlatList data={CURRENCIES} keyExtractor={(item) => item.code} renderItem={renderCurrencyItem} style={styles.modalList} />
         </ThemedView>
       </ThemedView>
     </Modal>

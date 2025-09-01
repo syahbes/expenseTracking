@@ -28,15 +28,12 @@ export const initializeDatabase = async (): Promise<SQLite.SQLiteDatabase> => {
     `);
 
     // Insert default categories if none exist
-    const existingCategories = await database.getAllAsync('SELECT COUNT(*) as count FROM categories') as [{ count: number }];
+    const existingCategories = (await database.getAllAsync('SELECT COUNT(*) as count FROM categories')) as [{ count: number }];
     const categoryCount = existingCategories[0].count;
-    
+
     if (categoryCount === 0) {
       for (const category of DEFAULT_CATEGORIES) {
-        await database.runAsync(
-          'INSERT INTO categories (name, icon) VALUES (?, ?)',
-          [category.name, category.icon]
-        );
+        await database.runAsync('INSERT INTO categories (name, icon) VALUES (?, ?)', [category.name, category.icon]);
       }
     }
 
