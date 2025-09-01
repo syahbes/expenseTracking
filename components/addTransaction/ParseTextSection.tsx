@@ -34,7 +34,7 @@ export default function ParseTextSection({
         numberOfLines={4}
       />
       <TouchableOpacity style={styles.pasteButton} onPress={onPaste}>
-        <ThemedText style={styles.pasteButtonText}>📋 Paste from Clipboard</ThemedText>
+        <ThemedText style={styles.pasteButtonText}>📋 {" "}Paste from Clipboard</ThemedText>
       </TouchableOpacity>
     </ThemedView>
   );

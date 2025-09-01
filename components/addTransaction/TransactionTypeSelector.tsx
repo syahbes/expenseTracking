@@ -29,7 +29,7 @@ export default function TransactionTypeSelector({
           onPress={() => onChange('expense')}
         >
           <ThemedText style={[styles.typeButtonText, value === 'expense' && styles.typeButtonTextActive]}>
-            💸 Expense
+            💸 {" "}Expense
           </ThemedText>
         </TouchableOpacity>
         <TouchableOpacity
@@ -37,7 +37,7 @@ export default function TransactionTypeSelector({
           onPress={() => onChange('income')}
         >
           <ThemedText style={[styles.typeButtonText, value === 'income' && styles.typeButtonTextActive]}>
-            💰 Income
+            💰 {" "}Income
           </ThemedText>
         </TouchableOpacity>
       </ThemedView>

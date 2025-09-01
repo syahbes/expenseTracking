@@ -21,10 +21,10 @@ export default function PaymentMethodSelector({
   );
 
   const methods = [
-    { key: 'credit_card' as PaymentMethod, label: '💳 Credit Card' },
-    { key: 'bank_transfer' as PaymentMethod, label: '🏦 Bank Transfer' },
-    { key: 'atm_withdrawal' as PaymentMethod, label: '🏧 ATM' },
-    { key: 'cash' as PaymentMethod, label: '💵 Cash' },
+    { key: 'credit_card' as PaymentMethod, label: '💳   Credit Card' },
+    { key: 'bank_transfer' as PaymentMethod, label: '🏦   Bank Transfer' },
+    { key: 'atm_withdrawal' as PaymentMethod, label: '🏧    ATM' },
+    { key: 'cash' as PaymentMethod, label: '💵    Cash' },
   ];
 
   return (

@@ -14,7 +14,7 @@ export default function SaveButton({ onPress }: { onPress: () => void }) {
 
   return (
     <TouchableOpacity style={styles.saveButton} onPress={onPress}>
-      <ThemedText style={styles.saveButtonText}>💾 Save Transaction</ThemedText>
+      <ThemedText style={styles.saveButtonText}>💾 {" "}Save Transaction</ThemedText>
     </TouchableOpacity>
   );
 }

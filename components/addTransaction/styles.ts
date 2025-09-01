@@ -1,11 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-export const createStyles = (
-  backgroundColor: string,
-  cardBackgroundColor: string,
-  textColor: string,
-  tintColor: string
-) =>
+export const createStyles = (backgroundColor: string, cardBackgroundColor: string, textColor: string, tintColor: string) =>
   StyleSheet.create({
     container: { flex: 1 },
     loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
@@ -91,7 +86,7 @@ export const createStyles = (
       paddingHorizontal: 16,
       flex: 1,
       minWidth: '45%',
-      alignItems: 'center',
+      alignItems: 'flex-start',
     },
     paymentMethodButtonActive: { backgroundColor: tintColor },
     paymentMethodText: { fontSize: 14, fontWeight: '500' },
@@ -112,6 +107,7 @@ export const createStyles = (
       paddingVertical: 18,
       alignItems: 'center',
       marginTop: 10,
+      marginBottom: 20,
     },
     saveButtonText: { color: backgroundColor, fontSize: 18, fontWeight: '600' },
     bottomSpacing: { height: 20 },
