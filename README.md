@@ -1,50 +1,139 @@
-# Welcome to your Expo app 👋
+# File Structure & Implementation Guide
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+## 📁 Complete File Structure
 
-## Get started
-
-1. Install dependencies
-
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
+```
+app/
+├── (tabs)/
+│   └── settings.tsx                 # Main settings screen (simplified)
+│
+├── components/
+│   ├── ThemedText.tsx              # Your existing component
+│   ├── ThemedView.tsx              # Your existing component
+│   └── settings/
+│       ├── ThemeSetting.tsx        # Theme toggle component
+│       ├── CurrencySetting.tsx     # Currency selection component
+│       ├── CategoriesSection.tsx   # Categories management section
+│       ├── CategoryModal.tsx       # Add category modal
+│       └── CurrencyModal.tsx       # Currency selection modal
+│
+├── database/
+│   ├── database.ts                 # Database initialization & setup
+│   ├── settingsService.ts          # Settings CRUD operations
+│   └── categoriesService.ts        # Categories CRUD operations
+│
+├── constants/
+│   └── settingsConstants.ts        # Default categories, currencies, etc.
+│
+└── types/
+    └── settings.ts                 # TypeScript interfaces
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## 🚀 Implementation Steps
 
-## Learn more
+### 1. Create the folder structure:
+```bash
+mkdir -p types constants database components/settings
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+### 2. Copy the files in this order:
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+1. **types/settings.ts** - Base types
+2. **constants/settingsConstants.ts** - Constants and defaults
+3. **database/database.ts** - Database initialization
+4. **database/settingsService.ts** - Settings operations
+5. **database/categoriesService.ts** - Categories operations
+6. **components/settings/** - All UI components
+7. **app/(tabs)/settings.tsx** - Main screen (replace existing)
 
-## Join the community
+## ✅ Benefits Achieved
 
-Join our community of developers creating universal apps.
+### **Separation of Concerns**
+- **UI Components**: Pure presentation logic
+- **Database Layer**: Data persistence and CRUD operations
+- **Business Logic**: Settings management separated from UI
+- **Types**: Centralized type definitions
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+### **Maintainability**
+- **Single Responsibility**: Each file has one clear purpose
+- **Easy Debugging**: Bugs are isolated to specific layers
+- **Code Reusability**: Components can be reused across the app
+
+### **Developer Experience**
+- **Better Testing**: Each layer can be tested independently
+- **TypeScript Benefits**: Strong typing throughout the app
+- **Clear Dependencies**: Easy to understand data flow
+
+### **Scalability**
+- **Easy Extensions**: Add new settings without touching existing code
+- **Database Flexibility**: Easy to modify database schema
+- **Component Library**: Reusable UI components for other screens
+
+## 🔄 How Data Flows
+
+```
+User Interaction 
+    ↓
+UI Component (ThemeSetting, CurrencySetting, etc.)
+    ↓
+Main Settings Screen (event handlers)
+    ↓
+Database Service (settingsService, categoriesService)
+    ↓
+SQLite Database
+    ↓
+UI Update (React state)
+```
+
+## 📋 Next Steps
+
+1. **Replace your current settings.tsx** with the refactored version
+2. **Create all the new files** as shown above
+3. **Test each feature** individually
+4. **Consider adding**:
+   - Loading states
+   - Error boundaries  
+   - Offline support
+   - Data validation
+   - Export/import settings
+
+## 🛠️ Usage Examples
+
+### Adding a new setting:
+```typescript
+// 1. Add to types/settings.ts
+export interface Settings {
+  theme: 'light' | 'dark';
+  currency: string;
+  language: string; // New setting
+}
+
+// 2. Add to constants
+export const LANGUAGES = [
+  { code: 'en', name: 'English' },
+  { code: 'es', name: 'Spanish' },
+];
+
+// 3. Create component
+export const LanguageSetting = ({ ... }) => { ... }
+
+// 4. Add to main screen
+<LanguageSetting ... />
+```
+
+### Accessing settings in other screens:
+```typescript
+import { loadSettings } from '@/database/settingsService';
+
+const MyScreen = () => {
+  const [settings, setSettings] = useState<Settings>();
+  
+  useEffect(() => {
+    loadSettings().then(setSettings);
+  }, []);
+  
+  // Use settings.currency, settings.theme, etc.
+};
+```
+
+This structure makes your code much more maintainable and follows React Native best practices! 🎉
