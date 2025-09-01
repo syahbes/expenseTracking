@@ -5,10 +5,10 @@ import { ThemedView } from '@/components/ThemedView';
 import { Category } from '@/types/settings';
 import React from 'react';
 import {
-    Alert,
-    FlatList,
-    StyleSheet,
-    TouchableOpacity,
+  Alert,
+  FlatList,
+  StyleSheet,
+  TouchableOpacity,
 } from 'react-native';
 
 interface CategoriesSectionProps {
@@ -112,6 +112,7 @@ const styles = StyleSheet.create({
   categoryInfo: {
     flexDirection: 'row',
     alignItems: 'center',
+    backgroundColor: 'transparent',
     flex: 1,
   },
   categoryIcon: {

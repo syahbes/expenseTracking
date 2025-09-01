@@ -69,6 +69,7 @@ const styles = StyleSheet.create({
   settingInfo: {
     flexDirection: 'row',
     alignItems: 'center',
+    backgroundColor: 'transparent',
   },
   settingIcon: {
     fontSize: 24,
