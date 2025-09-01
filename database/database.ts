@@ -25,6 +25,19 @@ export const initializeDatabase = async (): Promise<SQLite.SQLiteDatabase> => {
         name TEXT UNIQUE,
         icon TEXT NOT NULL
       );
+      
+      CREATE TABLE IF NOT EXISTS transactions (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        amount REAL NOT NULL,
+        description TEXT NOT NULL,
+        categoryId INTEGER NOT NULL,
+        type TEXT NOT NULL CHECK (type IN ('expense', 'income')),
+        paymentMethod TEXT NOT NULL CHECK (paymentMethod IN ('credit_card', 'bank_transfer', 'atm_withdrawal', 'cash')),
+        date TEXT NOT NULL,
+        time TEXT NOT NULL,
+        createdAt TEXT NOT NULL,
+        FOREIGN KEY (categoryId) REFERENCES categories (id)
+      );
     `);
 
     // Insert default categories if none exist
