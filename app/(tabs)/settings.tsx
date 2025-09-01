@@ -1,18 +1,21 @@
+//forth tab screen for settings
 
-//forth tab screen for settings 
+import { ThemedText } from "@/components/ThemedText";
+import { ThemedView } from "@/components/ThemedView";
+import { StyleSheet } from "react-native";
 
-import { Text, View } from "react-native";
-
-export default function Trasactions() {
+export default function Settings() {
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Text>settings screen</Text>
-    </View>
+    <ThemedView style={styles.titleContainer}>
+      <ThemedText type="title">Settings</ThemedText>
+    </ThemedView>
   );
 }
+
+const styles = StyleSheet.create({
+  titleContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});
