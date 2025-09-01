@@ -1,8 +1,7 @@
 // context/ThemeContext.tsx
+import { initializeDatabase } from '@/database/database';
+import { getSetting, updateSetting } from '@/database/settingsService';
 import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
-
-// You'll need to replace this with your actual database service
-// import { DatabaseService } from '@/services/database';
 
 export type Theme = 'light' | 'dark';
 
@@ -30,15 +29,18 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   const loadThemeFromDatabase = async () => {
     try {
       setIsLoading(true);
-      // Replace this with your actual database call
-      // const savedTheme = await DatabaseService.getTheme();
-      // if (savedTheme) {
-      //   setThemeState(savedTheme);
-      // }
       
-      // Temporary placeholder - replace with your DB call
-      const savedTheme = 'light'; // This should come from your SQLite database
-      setThemeState(savedTheme);
+      // Initialize database first
+      await initializeDatabase();
+      
+      // Load theme from database
+      const savedTheme = await getSetting('theme');
+      if (savedTheme === 'light' || savedTheme === 'dark') {
+        setThemeState(savedTheme);
+      } else {
+        // Default to light theme if no theme is saved
+        setThemeState('light');
+      }
     } catch (error) {
       console.error('Error loading theme from database:', error);
       // Fallback to light theme
@@ -51,7 +53,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   const setTheme = async (newTheme: Theme) => {
     try {
       // Save to database first
-      // await DatabaseService.saveTheme(newTheme);
+      await updateSetting('theme', newTheme);
       
       // Then update state
       setThemeState(newTheme);

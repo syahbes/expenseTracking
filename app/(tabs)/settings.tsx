@@ -1,4 +1,4 @@
-// app/(tabs)/settings.tsx - Refactored version
+// app/(tabs)/settings.tsx - Updated to remove duplicate theme handling
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import React, { useEffect, useState } from 'react';
@@ -17,13 +17,10 @@ import { CurrencySetting } from '@/components/settings/CurrencySetting';
 import { ThemeSetting } from '@/components/settings/ThemeSetting';
 
 // Types
-import { Category, Settings, Theme } from '@/types/settings';
+import { Category } from '@/types/settings';
 
 export default function SettingsScreen() {
-  const [settings, setSettings] = useState<Settings>({
-    theme: 'light',
-    currency: 'EUR',
-  });
+  const [currency, setCurrency] = useState('EUR');
   const [categories, setCategories] = useState<Category[]>([]);
   const [showCurrencyModal, setShowCurrencyModal] = useState(false);
   const [showCategoryModal, setShowCategoryModal] = useState(false);
@@ -53,20 +50,10 @@ export default function SettingsScreen() {
         loadCategories(),
       ]);
       
-      setSettings(settingsData);
+      setCurrency(settingsData.currency);
       setCategories(categoriesData);
     } catch (error) {
       console.error('Failed to load app data:', error);
-    }
-  };
-
-  // Theme handlers
-  const handleThemeChange = async (newTheme: Theme) => {
-    try {
-      await updateSetting('theme', newTheme);
-      setSettings(prev => ({ ...prev, theme: newTheme }));
-    } catch (error) {
-      Alert.alert('Error', 'Failed to update theme');
     }
   };
 
@@ -74,7 +61,7 @@ export default function SettingsScreen() {
   const handleCurrencySelect = async (currencyCode: string) => {
     try {
       await updateSetting('currency', currencyCode);
-      setSettings(prev => ({ ...prev, currency: currencyCode }));
+      setCurrency(currencyCode);
       setShowCurrencyModal(false);
     } catch (error) {
       Alert.alert('Error', 'Failed to update currency');
@@ -115,13 +102,10 @@ export default function SettingsScreen() {
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         <ThemedText type="title" style={styles.title}>Settings</ThemedText>
 
-        <ThemeSetting
-          theme={settings.theme}
-          onThemeChange={handleThemeChange}
-        />
+        <ThemeSetting />
 
         <CurrencySetting
-          selectedCurrency={settings.currency}
+          selectedCurrency={currency}
           onCurrencyPress={() => setShowCurrencyModal(true)}
         />
 
@@ -134,7 +118,7 @@ export default function SettingsScreen() {
 
       <CurrencyModal
         visible={showCurrencyModal}
-        selectedCurrency={settings.currency}
+        selectedCurrency={currency}
         onSelectCurrency={handleCurrencySelect}
         onClose={() => setShowCurrencyModal(false)}
       />

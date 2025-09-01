@@ -1,4 +1,4 @@
-// components/settings/ThemeSetting.tsx - Updated version
+// components/settings/ThemeSetting.tsx - Updated to use context
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useTheme } from '@/context/ThemeContext';
