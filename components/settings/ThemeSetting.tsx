@@ -1,20 +1,29 @@
-// components/settings/ThemeSetting.tsx
+// components/settings/ThemeSetting.tsx - Updated to use context
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { Theme } from '@/types/settings';
+import { useTheme } from '@/context/ThemeContext';
 import React from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, StyleSheet, TouchableOpacity } from 'react-native';
 
-interface ThemeSettingProps {
-  theme: Theme;
-  onThemeChange: (theme: Theme) => void;
-}
+export const ThemeSetting: React.FC = () => {
+  const { theme, setTheme, isLoading } = useTheme();
 
-export const ThemeSetting: React.FC<ThemeSettingProps> = ({ theme, onThemeChange }) => {
-  const toggleTheme = () => {
+  const toggleTheme = async () => {
     const newTheme = theme === 'light' ? 'dark' : 'light';
-    onThemeChange(newTheme);
+    await setTheme(newTheme);
   };
+
+  if (isLoading) {
+    return (
+      <ThemedView style={styles.settingSection}>
+        <ThemedText type="subtitle" style={styles.sectionTitle}>Theme</ThemedText>
+        <ThemedView style={[styles.settingItem, styles.loadingItem]}>
+          <ActivityIndicator size="small" />
+          <ThemedText style={styles.loadingText}>Loading theme...</ThemedText>
+        </ThemedView>
+      </ThemedView>
+    );
+  }
 
   return (
     <ThemedView style={styles.settingSection}>
@@ -53,6 +62,10 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     backgroundColor: 'rgba(128, 128, 128, 0.1)',
   },
+  loadingItem: {
+    justifyContent: 'center',
+    gap: 10,
+  },
   settingInfo: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -67,6 +80,10 @@ const styles = StyleSheet.create({
   },
   settingValue: {
     fontSize: 16,
+    opacity: 0.7,
+  },
+  loadingText: {
+    fontSize: 14,
     opacity: 0.7,
   },
 });
