@@ -5,6 +5,7 @@ import { useThemeColor } from '@/hooks/useThemeColor';
 import { TransactionType } from '@/types/transaction';
 import React from 'react';
 import { TouchableOpacity } from 'react-native';
+import { IconSymbol } from '../ui/IconSymbol';
 
 export default function TransactionTypeSelector({
   value,
@@ -28,16 +29,18 @@ export default function TransactionTypeSelector({
           style={[styles.typeButton, value === 'expense' && styles.typeButtonActive]}
           onPress={() => onChange('expense')}
         >
+          <IconSymbol name="chevron.up" size={24} color={value === 'expense' ? styles.typeButtonTextActive.color : styles.typeButtonText.color} />
           <ThemedText style={[styles.typeButtonText, value === 'expense' && styles.typeButtonTextActive]}>
-            💸 {" "}Expense
+          Expense
           </ThemedText>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.typeButton, value === 'income' && styles.typeButtonActive]}
           onPress={() => onChange('income')}
         >
+          <IconSymbol name="chevron.down" size={24} color={value === 'income' ? styles.typeButtonTextActive.color : styles.typeButtonText.color} />
           <ThemedText style={[styles.typeButtonText, value === 'income' && styles.typeButtonTextActive]}>
-            💰 {" "}Income
+          Income
           </ThemedText>
         </TouchableOpacity>
       </ThemedView>

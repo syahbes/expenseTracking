@@ -54,9 +54,12 @@ export const createStyles = (backgroundColor: string, cardBackgroundColor: strin
       paddingVertical: 15,
       paddingHorizontal: 20,
       alignItems: 'center',
+      flexDirection: 'row',
+      gap: 10,
+      justifyContent: 'center',
     },
     typeButtonActive: { backgroundColor: tintColor },
-    typeButtonText: { fontSize: 16, fontWeight: '500' },
+    typeButtonText: { fontSize: 16, fontWeight: '500', color: textColor },
     typeButtonTextActive: { color: backgroundColor },
     input: {
       backgroundColor: cardBackgroundColor,

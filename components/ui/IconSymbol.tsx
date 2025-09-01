@@ -10,7 +10,7 @@ type IconSymbolName = keyof typeof MAPPING;
 
 /**
  * Add your SF Symbols to Material Icons mappings here.
- * - see Material Icons in the [Icons Directory](https://icons.expo.fyi).
+ * - see Material Icons in the [Icons Directory](https://icons.expo.fyi). -- MaterialIcons
  * - see SF Symbols in the [SF Symbols](https://developer.apple.com/sf-symbols/) app.
  * - https://hotpot.ai/free-icons -- help with mapping names <SF ICONS NAME> : <MATERIAL ICON NAME> 
 */
@@ -20,7 +20,14 @@ const MAPPING = {
   'chart.bar': 'bar-chart',
   'gear': 'settings',
   'trash': 'delete',
-  'doc.text': 'content-paste'
+  'doc.text': 'content-paste',
+  'chevron.down': 'keyboard-arrow-down',
+  'chevron.up': 'keyboard-arrow-up',
+  'creditcard': 'credit-card',
+  'calendar': 'calendar-month',
+  'clock': 'access-time',
+  'checkmark.circle': 'check-circle-outline'
+
 } as IconMapping;
 
 /**
