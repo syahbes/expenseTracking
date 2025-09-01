@@ -35,10 +35,10 @@ export default function DateTimePickerSection({
       <ThemedText style={styles.sectionTitle}>Date & Time</ThemedText>
       <ThemedView style={styles.dateTimeContainer}>
         <TouchableOpacity style={styles.dateTimeButton} onPress={() => setShowDatePicker(true)}>
-          <ThemedText style={styles.dateTimeButtonText}>📅 {formatDate(date)}</ThemedText>
+          <ThemedText style={styles.dateTimeButtonText}>📅 {" "} {formatDate(date)}</ThemedText>
         </TouchableOpacity>
         <TouchableOpacity style={styles.dateTimeButton} onPress={() => setShowTimePicker(true)}>
-          <ThemedText style={styles.dateTimeButtonText}>🕐 {formatTime(time)}</ThemedText>
+          <ThemedText style={styles.dateTimeButtonText}>🕐 {" "} {formatTime(time)}</ThemedText>
         </TouchableOpacity>
       </ThemedView>
 

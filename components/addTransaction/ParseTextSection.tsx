@@ -4,6 +4,7 @@ import { ThemedView } from '@/components/ThemedView';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import React from 'react';
 import { TextInput, TouchableOpacity } from 'react-native';
+import { IconSymbol } from '../ui/IconSymbol';
 
 export default function ParseTextSection({
   rawText,
@@ -34,7 +35,8 @@ export default function ParseTextSection({
         numberOfLines={4}
       />
       <TouchableOpacity style={styles.pasteButton} onPress={onPaste}>
-        <ThemedText style={styles.pasteButtonText}>📋 {" "}Paste from Clipboard</ThemedText>
+        <IconSymbol name="doc.text" size={24} color={styles.pasteButtonText.color} />
+        <ThemedText style={styles.pasteButtonText}>Paste from Clipboard</ThemedText>
       </TouchableOpacity>
     </ThemedView>
   );

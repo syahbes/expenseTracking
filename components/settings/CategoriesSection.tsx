@@ -1,6 +1,7 @@
 // components/settings/CategoriesSection.tsx
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import { IconSymbol } from '@/components/ui/IconSymbol';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { Category } from '@/types/settings';
 import React from 'react';
@@ -36,7 +37,8 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({ categories
         <ThemedText style={styles.categoryName}>{item.name}</ThemedText>
       </ThemedView>
       <TouchableOpacity style={styles.deleteButton} onPress={() => handleDeleteCategory(item.id, item.name)}>
-        <ThemedText style={styles.deleteButtonText}>🗑️</ThemedText>
+        {/* <ThemedText style={styles.deleteButtonText}></ThemedText> */}
+      <IconSymbol name="trash" size={24} color={tint + '50'} />
       </TouchableOpacity>
     </ThemedView>
   );
