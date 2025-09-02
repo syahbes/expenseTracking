@@ -1,4 +1,4 @@
-// hooks/useTransactions.ts - Updated with edit modal support
+// hooks/useTransactions.ts - Updated with monthly stats
 import { loadCategories } from '@/database/categoriesService';
 import { initializeDatabase } from '@/database/database';
 import { deleteTransaction, getTransactions } from '@/database/transactionService';
@@ -12,6 +12,12 @@ interface TransactionFilters {
   selectedCategoryId: number | null;
   startDate: Date | null;
   endDate: Date | null;
+}
+
+interface MonthlyStats {
+  income: number;
+  expenses: number;
+  netTotal: number;
 }
 
 export function useTransactions() {
@@ -88,20 +94,28 @@ export function useTransactions() {
     });
   }, [transactions, filters]);
 
-  // Calculate monthly total for current month
-  const monthlyTotal = useMemo(() => {
+  // Calculate monthly statistics for current month
+  const monthlyStats = useMemo((): MonthlyStats => {
     const now = new Date();
     const currentYear = now.getFullYear();
     const currentMonth = now.getMonth();
 
-    return transactions
-      .filter((transaction) => {
-        const transactionDate = new Date(transaction.date);
-        return transactionDate.getFullYear() === currentYear && transactionDate.getMonth() === currentMonth;
-      })
-      .reduce((total, transaction) => {
-        return transaction.type === 'expense' ? total - transaction.amount : total + transaction.amount;
-      }, 0);
+    const currentMonthTransactions = transactions.filter((transaction) => {
+      const transactionDate = new Date(transaction.date);
+      return transactionDate.getFullYear() === currentYear && transactionDate.getMonth() === currentMonth;
+    });
+
+    const income = currentMonthTransactions
+      .filter((transaction) => transaction.type === 'income')
+      .reduce((total, transaction) => total + transaction.amount, 0);
+
+    const expenses = currentMonthTransactions
+      .filter((transaction) => transaction.type === 'expense')
+      .reduce((total, transaction) => total + transaction.amount, 0);
+
+    const netTotal = income - expenses;
+
+    return { income, expenses, netTotal };
   }, [transactions]);
 
   // Handlers
@@ -162,7 +176,7 @@ export function useTransactions() {
     transactions,
     filteredTransactions,
     categories,
-    monthlyTotal,
+    monthlyStats,
     isLoading,
     filters,
     editingTransaction,

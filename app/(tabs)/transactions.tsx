@@ -1,5 +1,4 @@
-// app/(tabs)/transactions.tsx - Final version with edit modal
-import { ThemedText } from '@/components/ThemedText';
+// app/(tabs)/transactions.tsx
 import { ThemedView } from '@/components/ThemedView';
 import { EditTransactionModal } from '@/components/transactions/EditTransactionModal';
 import { FilterSection } from '@/components/transactions/FilterSection';
@@ -8,69 +7,81 @@ import { SearchSection } from '@/components/transactions/SearchSection';
 import { TransactionsList } from '@/components/transactions/TransactionsList';
 import { useTransactions } from '@/hooks/useTransactions';
 import React from 'react';
-import { StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { RefreshControl, ScrollView, StyleSheet } from 'react-native';
 
 export default function TransactionsScreen() {
   const {
+    transactions,
     filteredTransactions,
     categories,
-    monthlyTotal,
+    monthlyStats,
     isLoading,
     filters,
     editingTransaction,
     showEditModal,
-    handlers,
+    handlers: {
+      handleSearchChange,
+      handleCategorySelect,
+      handleDateRangeChange,
+      handleClearFilters,
+      handleDeleteTransaction,
+      handleEditTransaction,
+      handleCloseEditModal,
+      handleTransactionUpdated,
+    },
   } = useTransactions();
 
+  const onRefresh = async () => {
+    // Force reload of transactions
+    await handleTransactionUpdated();
+  };
+
   if (isLoading) {
-    return (
-      <ThemedView style={styles.loadingContainer}>
-        <ThemedText>Loading transactions...</ThemedText>
-      </ThemedView>
-    );
+    return <ThemedView style={styles.container}>{/* You can add a loading indicator here */}</ThemedView>;
   }
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
-      <ThemedView style={styles.container}>
-        <ThemedText type="title" style={styles.title}>
-          Transactions
-        </ThemedText>
+    <ThemedView style={styles.container}>
+      <ScrollView
+        style={styles.scrollView}
+        refreshControl={<RefreshControl refreshing={isLoading} onRefresh={onRefresh} />}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Monthly Summary - Now shows income, expenses, and net total */}
+        <MonthlyTotal income={monthlyStats.income} expenses={monthlyStats.expenses} netTotal={monthlyStats.netTotal} />
 
-        <MonthlyTotal total={monthlyTotal} />
+        {/* Search Section */}
+        <SearchSection searchQuery={filters.searchQuery} onSearchChange={handleSearchChange} />
 
-        <SearchSection 
-          searchQuery={filters.searchQuery}
-          onSearchChange={handlers.handleSearchChange}
-        />
-
+        {/* Filter Section */}
         <FilterSection
           categories={categories}
           selectedCategoryId={filters.selectedCategoryId}
           startDate={filters.startDate}
           endDate={filters.endDate}
-          onCategorySelect={handlers.handleCategorySelect}
-          onDateRangeChange={handlers.handleDateRangeChange}
-          onClearFilters={handlers.handleClearFilters}
+          onCategorySelect={handleCategorySelect}
+          onDateRangeChange={handleDateRangeChange}
+          onClearFilters={handleClearFilters}
         />
 
+        {/* Transactions List - Shows both income and expense transactions */}
         <TransactionsList
           transactions={filteredTransactions}
           categories={categories}
-          onEditTransaction={handlers.handleEditTransaction}
-          onDeleteTransaction={handlers.handleDeleteTransaction}
+          onEditTransaction={handleEditTransaction}
+          onDeleteTransaction={handleDeleteTransaction}
         />
+      </ScrollView>
 
-        <EditTransactionModal
-          visible={showEditModal}
-          transaction={editingTransaction}
-          categories={categories}
-          onClose={handlers.handleCloseEditModal}
-          onTransactionUpdated={handlers.handleTransactionUpdated}
-        />
-      </ThemedView>
-    </SafeAreaView>
+      {/* Edit Modal */}
+      <EditTransactionModal
+        visible={showEditModal}
+        transaction={editingTransaction}
+        categories={categories}
+        onClose={handleCloseEditModal}
+        onTransactionUpdated={handleTransactionUpdated}
+      />
+    </ThemedView>
   );
 }
 
@@ -78,15 +89,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  loadingContainer: {
+  scrollView: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  title: {
-    marginBottom: 20,
-    textAlign: 'center',
-    marginTop: 10,
-    paddingHorizontal: 20,
   },
 });
