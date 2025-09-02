@@ -1,4 +1,4 @@
-// app/(tabs)/transactions.tsx
+// app/(tabs)/transactions.tsx - Fixed version
 import { ThemedView } from '@/components/ThemedView';
 import { EditTransactionModal } from '@/components/transactions/EditTransactionModal';
 import { FilterSection } from '@/components/transactions/FilterSection';
@@ -6,8 +6,9 @@ import { MonthlyTotal } from '@/components/transactions/MonthlyTotal';
 import { SearchSection } from '@/components/transactions/SearchSection';
 import { TransactionsList } from '@/components/transactions/TransactionsList';
 import { useTransactions } from '@/hooks/useTransactions';
-import React from 'react';
-import { RefreshControl, ScrollView, StyleSheet } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
+import React, { useCallback } from 'react';
+import { StyleSheet } from 'react-native';
 
 export default function TransactionsScreen() {
   const {
@@ -28,13 +29,16 @@ export default function TransactionsScreen() {
       handleEditTransaction,
       handleCloseEditModal,
       handleTransactionUpdated,
+      refreshData, // Add this method
     },
   } = useTransactions();
 
-  const onRefresh = async () => {
-    // Force reload of transactions
-    await handleTransactionUpdated();
-  };
+  // Refresh data when screen comes into focus
+  useFocusEffect(
+    useCallback(() => {
+      refreshData();
+    }, [refreshData])
+  );
 
   if (isLoading) {
     return <ThemedView style={styles.container}>{/* You can add a loading indicator here */}</ThemedView>;
@@ -42,12 +46,9 @@ export default function TransactionsScreen() {
 
   return (
     <ThemedView style={styles.container}>
-      <ScrollView
-        style={styles.scrollView}
-        refreshControl={<RefreshControl refreshing={isLoading} onRefresh={onRefresh} />}
-        showsVerticalScrollIndicator={false}
-      >
-        {/* Monthly Summary - Now shows income, expenses, and net total */}
+      {/* Fixed: Remove ScrollView wrapper and let FlatList handle its own scrolling */}
+      <ThemedView style={styles.content}>
+        {/* Monthly Summary */}
         <MonthlyTotal income={monthlyStats.income} expenses={monthlyStats.expenses} netTotal={monthlyStats.netTotal} />
 
         {/* Search Section */}
@@ -64,14 +65,16 @@ export default function TransactionsScreen() {
           onClearFilters={handleClearFilters}
         />
 
-        {/* Transactions List - Shows both income and expense transactions */}
+        {/* Transactions List - Now handles its own scrolling */}
         <TransactionsList
           transactions={filteredTransactions}
           categories={categories}
           onEditTransaction={handleEditTransaction}
           onDeleteTransaction={handleDeleteTransaction}
+          onRefresh={refreshData}
+          isRefreshing={isLoading}
         />
-      </ScrollView>
+      </ThemedView>
 
       {/* Edit Modal */}
       <EditTransactionModal
@@ -89,7 +92,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  scrollView: {
+  content: {
     flex: 1,
   },
 });

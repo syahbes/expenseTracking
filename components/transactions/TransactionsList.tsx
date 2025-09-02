@@ -1,20 +1,29 @@
-// components/transactions/TransactionsList.tsx
+// components/transactions/TransactionsList.tsx - Fixed version
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { TransactionItem } from '@/components/transactions/TransactionItem';
 import { Category } from '@/types/settings';
 import { Transaction } from '@/types/transaction';
 import React from 'react';
-import { FlatList, StyleSheet } from 'react-native';
+import { FlatList, RefreshControl, StyleSheet } from 'react-native';
 
 interface TransactionsListProps {
   transactions: Transaction[];
   categories: Category[];
   onEditTransaction: (transaction: Transaction) => void;
   onDeleteTransaction: (transactionId: number) => void;
+  onRefresh: () => Promise<void>;
+  isRefreshing: boolean;
 }
 
-export const TransactionsList: React.FC<TransactionsListProps> = ({ transactions, categories, onEditTransaction, onDeleteTransaction }) => {
+export const TransactionsList: React.FC<TransactionsListProps> = ({
+  transactions,
+  categories,
+  onEditTransaction,
+  onDeleteTransaction,
+  onRefresh,
+  isRefreshing,
+}) => {
   const renderTransaction = ({ item }: { item: Transaction }) => (
     <TransactionItem
       transaction={item}
@@ -27,42 +36,44 @@ export const TransactionsList: React.FC<TransactionsListProps> = ({ transactions
   const renderEmptyState = () => (
     <ThemedView style={styles.emptyContainer}>
       <ThemedText style={styles.emptyText}>No transactions found</ThemedText>
-      <ThemedText style={styles.emptySubtext}>Try adjusting your filters or add some transactions</ThemedText>
+      <ThemedText style={styles.emptySubtext}>
+        {transactions.length === 0 ? 'Start by adding your first transaction!' : 'Try adjusting your filters'}
+      </ThemedText>
     </ThemedView>
   );
 
-  const getItemLayout = (_: any, index: number) => ({
-    length: 80, // Estimated height of each item
-    offset: 80 * index,
-    index,
-  });
+  const renderHeader = () => <ThemedView style={styles.headerSpacing} />;
+
+  const renderFooter = () => <ThemedView style={styles.footerSpacing} />;
 
   return (
-    <ThemedView style={styles.container}>
-      <FlatList
-        data={transactions}
-        renderItem={renderTransaction}
-        keyExtractor={(item) => item.id.toString()}
-        getItemLayout={getItemLayout}
-        removeClippedSubviews={true}
-        maxToRenderPerBatch={20}
-        windowSize={10}
-        initialNumToRender={15}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={[styles.listContainer, transactions.length === 0 && styles.emptyListContainer]}
-        ListEmptyComponent={renderEmptyState}
-      />
-    </ThemedView>
+    <FlatList
+      data={transactions}
+      renderItem={renderTransaction}
+      keyExtractor={(item) => item.id.toString()}
+      ListHeaderComponent={renderHeader}
+      ListFooterComponent={renderFooter}
+      ListEmptyComponent={renderEmptyState}
+      refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={[styles.listContainer, transactions.length === 0 && styles.emptyListContainer]}
+      // Performance optimizations
+      removeClippedSubviews={true}
+      maxToRenderPerBatch={20}
+      windowSize={10}
+      initialNumToRender={15}
+      getItemLayout={(data, index) => ({
+        length: 100, // Estimated height
+        offset: 100 * index,
+        index,
+      })}
+    />
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   listContainer: {
     paddingHorizontal: 20,
-    paddingBottom: 20,
   },
   emptyListContainer: {
     flex: 1,
@@ -70,7 +81,7 @@ const styles = StyleSheet.create({
   },
   emptyContainer: {
     alignItems: 'center',
-    paddingVertical: 40,
+    paddingVertical: 60,
   },
   emptyText: {
     fontSize: 18,
@@ -82,5 +93,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     opacity: 0.4,
     textAlign: 'center',
+    paddingHorizontal: 40,
+  },
+  headerSpacing: {
+    height: 10,
+  },
+  footerSpacing: {
+    height: 20,
   },
 });

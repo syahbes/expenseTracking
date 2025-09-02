@@ -1,4 +1,4 @@
-// hooks/useTransactions.ts - Updated with monthly stats
+// hooks/useTransactions.ts - Fixed version with better data management
 import { loadCategories } from '@/database/categoriesService';
 import { initializeDatabase } from '@/database/database';
 import { deleteTransaction, getTransactions } from '@/database/transactionService';
@@ -51,15 +51,32 @@ export function useTransactions() {
     }
   };
 
-  const loadData = async () => {
-    const [transactionsData, categoriesData] = await Promise.all([getTransactions(), loadCategories()]);
-    setTransactions(transactionsData);
-    setCategories(categoriesData);
-  };
+  const loadData = useCallback(async () => {
+    try {
+      const [transactionsData, categoriesData] = await Promise.all([getTransactions(), loadCategories()]);
+
+      console.log('Loaded transactions:', transactionsData.length); // Debug log
+      console.log('Loaded categories:', categoriesData.length); // Debug log
+
+      setTransactions(transactionsData);
+      setCategories(categoriesData);
+    } catch (error) {
+      console.error('Error loading data:', error);
+    }
+  }, []);
+
+  // Refresh data function for manual refresh
+  const refreshData = useCallback(async () => {
+    setIsLoading(true);
+    await loadData();
+    setIsLoading(false);
+  }, [loadData]);
 
   // Filter transactions based on current filters
   const filteredTransactions = useMemo(() => {
-    return transactions.filter((transaction) => {
+    console.log('Filtering transactions. Total:', transactions.length); // Debug log
+
+    const filtered = transactions.filter((transaction) => {
       // Search filter
       if (filters.searchQuery) {
         const searchLower = filters.searchQuery.toLowerCase();
@@ -92,6 +109,9 @@ export function useTransactions() {
 
       return true;
     });
+
+    console.log('Filtered transactions:', filtered.length); // Debug log
+    return filtered;
   }, [transactions, filters]);
 
   // Calculate monthly statistics for current month
@@ -140,23 +160,26 @@ export function useTransactions() {
     });
   }, []);
 
-  const handleDeleteTransaction = useCallback(async (transactionId: number) => {
-    Alert.alert('Delete Transaction', 'Are you sure you want to delete this transaction?', [
-      { text: 'Cancel', style: 'cancel' },
-      {
-        text: 'Delete',
-        style: 'destructive',
-        onPress: async () => {
-          try {
-            await deleteTransaction(transactionId);
-            await loadData(); // Reload data
-          } catch (error) {
-            Alert.alert('Error', 'Failed to delete transaction');
-          }
+  const handleDeleteTransaction = useCallback(
+    async (transactionId: number) => {
+      Alert.alert('Delete Transaction', 'Are you sure you want to delete this transaction?', [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await deleteTransaction(transactionId);
+              await loadData(); // Reload data
+            } catch (error) {
+              Alert.alert('Error', 'Failed to delete transaction');
+            }
+          },
         },
-      },
-    ]);
-  }, []);
+      ]);
+    },
+    [loadData]
+  );
 
   const handleEditTransaction = useCallback((transaction: Transaction) => {
     setEditingTransaction(transaction);
@@ -170,7 +193,7 @@ export function useTransactions() {
 
   const handleTransactionUpdated = useCallback(async () => {
     await loadData(); // Reload data after update
-  }, []);
+  }, [loadData]);
 
   return {
     transactions,
@@ -190,6 +213,7 @@ export function useTransactions() {
       handleEditTransaction,
       handleCloseEditModal,
       handleTransactionUpdated,
+      refreshData, // Export refresh function
     },
   };
 }

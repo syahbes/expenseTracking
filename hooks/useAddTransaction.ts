@@ -1,3 +1,4 @@
+// hooks/useAddTransaction.ts - Fixed version
 import { createStyles } from '@/components/addTransaction/styles';
 import { loadCategories } from '@/database/categoriesService';
 import { initializeDatabase } from '@/database/database';
@@ -9,7 +10,6 @@ import { parseTransactionText } from '@/utils/transactionParser';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { useEffect, useState } from 'react';
 import { Alert } from 'react-native';
-
 
 export function useAddTransaction() {
   const [rawText, setRawText] = useState('');
@@ -94,17 +94,23 @@ export function useAddTransaction() {
         type: transactionType,
         paymentMethod,
         date: selectedDate.toISOString().split('T')[0],
-        time: `${selectedTime.getHours().toString().padStart(2, '0')}:${selectedTime
-          .getMinutes()
-          .toString()
-          .padStart(2, '0')}`,
+        time: `${selectedTime.getHours().toString().padStart(2, '0')}:${selectedTime.getMinutes().toString().padStart(2, '0')}`,
       };
 
       await addTransaction(newTransaction);
-      Alert.alert('Success', 'Transaction added successfully', [{ text: 'OK', onPress: clearForm }]);
+
+      // Show success message and clear form
+      Alert.alert('Success', `${transactionType === 'expense' ? 'Expense' : 'Income'} added successfully!`, [
+        {
+          text: 'OK',
+          onPress: clearForm,
+        },
+      ]);
+
+      console.log('Transaction saved successfully:', newTransaction); // Debug log
     } catch (error) {
       console.error('Save error:', error);
-      Alert.alert('Error', 'Failed to save transaction');
+      Alert.alert('Error', 'Failed to save transaction. Please try again.');
     }
   };
 
