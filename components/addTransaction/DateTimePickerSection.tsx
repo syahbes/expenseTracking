@@ -5,6 +5,7 @@ import { useThemeColor } from '@/hooks/useThemeColor';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import React, { useState } from 'react';
 import { TouchableOpacity } from 'react-native';
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 export default function DateTimePickerSection({
   date,
@@ -26,6 +27,7 @@ export default function DateTimePickerSection({
     useThemeColor({}, 'text'),
     useThemeColor({}, 'tint')
   );
+  const iconColor = useThemeColor({}, 'text');
 
   const formatDate = (d: Date) => d.toLocaleDateString();
   const formatTime = (d: Date) => d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -35,10 +37,12 @@ export default function DateTimePickerSection({
       <ThemedText style={styles.sectionTitle}>Date & Time</ThemedText>
       <ThemedView style={styles.dateTimeContainer}>
         <TouchableOpacity style={styles.dateTimeButton} onPress={() => setShowDatePicker(true)}>
-          <ThemedText style={styles.dateTimeButtonText}>📅 {" "} {formatDate(date)}</ThemedText>
+          <AntDesign name="calendar" size={20} color={iconColor} />
+          <ThemedText style={styles.dateTimeButtonText}>{formatDate(date)}</ThemedText>
         </TouchableOpacity>
         <TouchableOpacity style={styles.dateTimeButton} onPress={() => setShowTimePicker(true)}>
-          <ThemedText style={styles.dateTimeButtonText}>🕐 {" "} {formatTime(time)}</ThemedText>
+          <AntDesign name="clockcircleo" size={20} color={iconColor} />
+          <ThemedText style={styles.dateTimeButtonText}>{formatTime(time)}</ThemedText>
         </TouchableOpacity>
       </ThemedView>
 

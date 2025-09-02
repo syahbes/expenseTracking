@@ -11,6 +11,8 @@ import { updateTransaction } from '@/database/transactionService';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { Category } from '@/types/settings';
 import { NewTransaction, PaymentMethod, Transaction, TransactionType } from '@/types/transaction';
+import AntDesign from '@expo/vector-icons/AntDesign';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import React, { useEffect, useState } from 'react';
 import { Alert, Modal, Platform, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
@@ -128,16 +130,19 @@ export const EditTransactionModal: React.FC<EditTransactionModalProps> = ({ visi
               <ThemedText style={styles.sectionTitle}>Date & Time</ThemedText>
               <ThemedView style={styles.dateTimeContainer}>
                 <TouchableOpacity style={styles.dateTimeButton} onPress={() => setShowDatePicker(true)}>
-                  <ThemedText style={styles.dateTimeButtonText}>📅 {formatDate(selectedDate)}</ThemedText>
+                  <AntDesign name="calendar" size={20} color={textColor} />
+                  <ThemedText style={styles.dateTimeButtonText}>{formatDate(selectedDate)}</ThemedText>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.dateTimeButton} onPress={() => setShowTimePicker(true)}>
-                  <ThemedText style={styles.dateTimeButtonText}>🕐 {formatTime(selectedTime)}</ThemedText>
+                  <AntDesign name="clockcircleo" size={20} color={textColor} />
+                  <ThemedText style={styles.dateTimeButtonText}>{formatTime(selectedTime)}</ThemedText>
                 </TouchableOpacity>
               </ThemedView>
             </ThemedView>
 
             <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
-              <ThemedText style={styles.saveButtonText}>💾 Update Transaction</ThemedText>
+              <FontAwesome name="save" size={24} color={backgroundColor} />
+              <ThemedText style={styles.saveButtonText}>Update Transaction</ThemedText>
             </TouchableOpacity>
           </ScrollView>
 
@@ -215,6 +220,9 @@ const createStyles = (backgroundColor: string, cardBackgroundColor: string, text
       paddingVertical: 15,
       paddingHorizontal: 20,
       alignItems: 'center',
+      flexDirection: 'row',
+      gap: 10,
+      justifyContent: 'center',
     },
     dateTimeButtonText: {
       fontSize: 16,
@@ -227,6 +235,9 @@ const createStyles = (backgroundColor: string, cardBackgroundColor: string, text
       alignItems: 'center',
       marginTop: 10,
       marginBottom: 20,
+      flexDirection: 'row',
+      gap: 10,
+      justifyContent: 'center',
     },
     saveButtonText: {
       color: backgroundColor,
