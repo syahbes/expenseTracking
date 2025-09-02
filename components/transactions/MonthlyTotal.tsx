@@ -1,4 +1,4 @@
-// components/transactions/MonthlyTotal.tsx - Updated version
+// components/transactions/MonthlyTotal.tsx - Updated with dynamic period
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useThemeColor } from '@/hooks/useThemeColor';
@@ -9,9 +9,19 @@ interface MonthlyTotalProps {
   income: number;
   expenses: number;
   netTotal: number;
+  displayPeriod: string;
+  totalTransactions?: number;
+  filteredTransactions?: number;
 }
 
-export const MonthlyTotal: React.FC<MonthlyTotalProps> = ({ income, expenses, netTotal }) => {
+export const MonthlyTotal: React.FC<MonthlyTotalProps> = ({
+  income,
+  expenses,
+  netTotal,
+  displayPeriod,
+  totalTransactions = 0,
+  filteredTransactions = 0,
+}) => {
   const cardBackgroundColor = useThemeColor({}, 'cardBackgroundColor');
   const tintColor = useThemeColor({}, 'tint');
   const textColor = useThemeColor({}, 'text');
@@ -21,16 +31,20 @@ export const MonthlyTotal: React.FC<MonthlyTotalProps> = ({ income, expenses, ne
     return `€${amount.toFixed(2)}`;
   };
 
-  const getMonthName = () => {
-    return new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-  };
-
   const isPositive = netTotal >= 0;
+  const hasFilters = filteredTransactions < totalTransactions;
 
   return (
     <ThemedView style={styles.container}>
-      <ThemedText style={styles.monthLabel}>{getMonthName()}</ThemedText>
-      
+      <ThemedText style={styles.periodLabel}>{displayPeriod}</ThemedText>
+
+      {/* Show transaction count if filtered */}
+      {hasFilters && (
+        <ThemedText style={styles.filterInfo}>
+          {filteredTransactions} of {totalTransactions} transactions
+        </ThemedText>
+      )}
+
       {/* Income and Expenses breakdown */}
       <ThemedView style={styles.breakdown}>
         <ThemedView style={styles.breakdownItem}>
@@ -48,9 +62,7 @@ export const MonthlyTotal: React.FC<MonthlyTotalProps> = ({ income, expenses, ne
         {isPositive ? '+' : ''}
         {formatAmount(netTotal)}
       </ThemedText>
-      <ThemedText style={styles.totalLabel}>
-        {isPositive ? 'Net Surplus' : 'Net Deficit'}
-      </ThemedText>
+      <ThemedText style={styles.totalLabel}>{isPositive ? 'Net Surplus' : 'Net Deficit'}</ThemedText>
     </ThemedView>
   );
 };
@@ -65,10 +77,17 @@ const createStyles = (cardBackgroundColor: string, tintColor: string, textColor:
       marginBottom: 20,
       alignItems: 'center',
     },
-    monthLabel: {
+    periodLabel: {
       fontSize: 16,
-      opacity: 0.7,
+      fontWeight: '500',
+      marginBottom: 8,
+      opacity: 0.8,
+    },
+    filterInfo: {
+      fontSize: 12,
+      opacity: 0.6,
       marginBottom: 12,
+      color: tintColor,
     },
     breakdown: {
       flexDirection: 'row',

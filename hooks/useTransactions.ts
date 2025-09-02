@@ -1,4 +1,4 @@
-// hooks/useTransactions.ts - Fixed version with better data management
+// hooks/useTransactions.ts - Fixed version with dynamic monthly stats
 import { loadCategories } from '@/database/categoriesService';
 import { initializeDatabase } from '@/database/database';
 import { deleteTransaction, getTransactions } from '@/database/transactionService';
@@ -18,6 +18,8 @@ interface MonthlyStats {
   income: number;
   expenses: number;
   netTotal: number;
+  totalTransactions: number;
+  filteredTransactions: number;
 }
 
 export function useTransactions() {
@@ -55,8 +57,8 @@ export function useTransactions() {
     try {
       const [transactionsData, categoriesData] = await Promise.all([getTransactions(), loadCategories()]);
 
-      console.log('Loaded transactions:', transactionsData.length); // Debug log
-      console.log('Loaded categories:', categoriesData.length); // Debug log
+      console.log('Loaded transactions:', transactionsData.length);
+      console.log('Loaded categories:', categoriesData.length);
 
       setTransactions(transactionsData);
       setCategories(categoriesData);
@@ -74,7 +76,7 @@ export function useTransactions() {
 
   // Filter transactions based on current filters
   const filteredTransactions = useMemo(() => {
-    console.log('Filtering transactions. Total:', transactions.length); // Debug log
+    console.log('Filtering transactions. Total:', transactions.length);
 
     const filtered = transactions.filter((transaction) => {
       // Search filter
@@ -110,33 +112,59 @@ export function useTransactions() {
       return true;
     });
 
-    console.log('Filtered transactions:', filtered.length); // Debug log
+    console.log('Filtered transactions:', filtered.length);
     return filtered;
   }, [transactions, filters]);
 
-  // Calculate monthly statistics for current month
+  // Calculate statistics based on filtered transactions (dynamic)
   const monthlyStats = useMemo((): MonthlyStats => {
-    const now = new Date();
-    const currentYear = now.getFullYear();
-    const currentMonth = now.getMonth();
-
-    const currentMonthTransactions = transactions.filter((transaction) => {
-      const transactionDate = new Date(transaction.date);
-      return transactionDate.getFullYear() === currentYear && transactionDate.getMonth() === currentMonth;
-    });
-
-    const income = currentMonthTransactions
+    // Calculate stats from filtered transactions instead of current month only
+    const income = filteredTransactions
       .filter((transaction) => transaction.type === 'income')
       .reduce((total, transaction) => total + transaction.amount, 0);
 
-    const expenses = currentMonthTransactions
+    const expenses = filteredTransactions
       .filter((transaction) => transaction.type === 'expense')
       .reduce((total, transaction) => total + transaction.amount, 0);
 
     const netTotal = income - expenses;
 
-    return { income, expenses, netTotal };
-  }, [transactions]);
+    return {
+      income,
+      expenses,
+      netTotal,
+      totalTransactions: transactions.length,
+      filteredTransactions: filteredTransactions.length,
+    };
+  }, [filteredTransactions, transactions.length]);
+
+  // Get the display period for the MonthlyTotal component
+  const getDisplayPeriod = useMemo(() => {
+    const hasFilters = filters.searchQuery || filters.selectedCategoryId !== null || filters.startDate || filters.endDate;
+
+    if (!hasFilters) {
+      // No filters - show current month
+      return new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+    }
+
+    if (filters.startDate && filters.endDate) {
+      // Both dates selected
+      const start = filters.startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      const end = filters.endDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      return `${start} - ${end}`;
+    } else if (filters.startDate) {
+      // Only start date
+      const start = filters.startDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+      return `From ${start}`;
+    } else if (filters.endDate) {
+      // Only end date
+      const end = filters.endDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+      return `Until ${end}`;
+    } else {
+      // Other filters (search, category) - show "Filtered Results"
+      return 'Filtered Results';
+    }
+  }, [filters]);
 
   // Handlers
   const handleSearchChange = useCallback((query: string) => {
@@ -170,7 +198,7 @@ export function useTransactions() {
           onPress: async () => {
             try {
               await deleteTransaction(transactionId);
-              await loadData(); // Reload data
+              await loadData();
             } catch (error) {
               Alert.alert('Error', 'Failed to delete transaction');
             }
@@ -192,7 +220,7 @@ export function useTransactions() {
   }, []);
 
   const handleTransactionUpdated = useCallback(async () => {
-    await loadData(); // Reload data after update
+    await loadData();
   }, [loadData]);
 
   return {
@@ -200,6 +228,7 @@ export function useTransactions() {
     filteredTransactions,
     categories,
     monthlyStats,
+    displayPeriod: getDisplayPeriod,
     isLoading,
     filters,
     editingTransaction,
@@ -213,7 +242,7 @@ export function useTransactions() {
       handleEditTransaction,
       handleCloseEditModal,
       handleTransactionUpdated,
-      refreshData, // Export refresh function
+      refreshData,
     },
   };
 }

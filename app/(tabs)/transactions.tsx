@@ -1,4 +1,4 @@
-// app/(tabs)/transactions.tsx - Fixed version
+// app/(tabs)/transactions.tsx - Updated to pass displayPeriod
 import { ThemedView } from '@/components/ThemedView';
 import { EditTransactionModal } from '@/components/transactions/EditTransactionModal';
 import { FilterSection } from '@/components/transactions/FilterSection';
@@ -16,6 +16,7 @@ export default function TransactionsScreen() {
     filteredTransactions,
     categories,
     monthlyStats,
+    displayPeriod,
     isLoading,
     filters,
     editingTransaction,
@@ -29,7 +30,7 @@ export default function TransactionsScreen() {
       handleEditTransaction,
       handleCloseEditModal,
       handleTransactionUpdated,
-      refreshData, // Add this method
+      refreshData,
     },
   } = useTransactions();
 
@@ -46,10 +47,16 @@ export default function TransactionsScreen() {
 
   return (
     <ThemedView style={styles.container}>
-      {/* Fixed: Remove ScrollView wrapper and let FlatList handle its own scrolling */}
       <ThemedView style={styles.content}>
-        {/* Monthly Summary */}
-        <MonthlyTotal income={monthlyStats.income} expenses={monthlyStats.expenses} netTotal={monthlyStats.netTotal} />
+        {/* Dynamic Monthly Summary - now shows stats based on filtered results */}
+        <MonthlyTotal
+          income={monthlyStats.income}
+          expenses={monthlyStats.expenses}
+          netTotal={monthlyStats.netTotal}
+          displayPeriod={displayPeriod}
+          totalTransactions={monthlyStats.totalTransactions}
+          filteredTransactions={monthlyStats.filteredTransactions}
+        />
 
         {/* Search Section */}
         <SearchSection searchQuery={filters.searchQuery} onSearchChange={handleSearchChange} />
@@ -65,7 +72,7 @@ export default function TransactionsScreen() {
           onClearFilters={handleClearFilters}
         />
 
-        {/* Transactions List - Now handles its own scrolling */}
+        {/* Transactions List */}
         <TransactionsList
           transactions={filteredTransactions}
           categories={categories}
