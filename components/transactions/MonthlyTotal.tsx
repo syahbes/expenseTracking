@@ -62,7 +62,6 @@ export const MonthlyTotal: React.FC<MonthlyTotalProps> = ({
         {isPositive ? '+' : ''}
         {formatAmount(netTotal)}
       </ThemedText>
-      <ThemedText style={styles.totalLabel}>{isPositive ? 'Net Surplus' : 'Net Deficit'}</ThemedText>
     </ThemedView>
   );
 };

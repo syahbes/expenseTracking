@@ -3,6 +3,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useTheme } from '@/context/ThemeContext';
 import { useThemeColor } from '@/hooks/useThemeColor';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import React from 'react';
 import { ActivityIndicator, StyleSheet, TouchableOpacity } from 'react-native';
 
@@ -38,7 +39,9 @@ export const ThemeSetting: React.FC = () => {
       </ThemedText>
       <TouchableOpacity style={styles.settingItem} onPress={toggleTheme}>
         <ThemedView style={styles.settingInfo}>
-          <ThemedText style={styles.settingIcon}>{theme === 'light' ? '☀️' : '🌙'}</ThemedText>
+          <ThemedText style={styles.settingIcon}>
+            {theme === 'light' ? <MaterialIcons name="light-mode" size={24} /> : <MaterialIcons name="dark-mode" size={24} />}
+          </ThemedText>
           <ThemedText style={styles.settingLabel}>{theme === 'light' ? 'Light Theme' : 'Dark Theme'}</ThemedText>
         </ThemedView>
         <ThemedText style={styles.settingValue}>Tap to switch</ThemedText>

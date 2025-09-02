@@ -24,7 +24,6 @@ export const CurrencySetting: React.FC<CurrencySettingProps> = ({ selectedCurren
       </ThemedText>
       <TouchableOpacity style={styles.settingItem} onPress={onCurrencyPress}>
         <ThemedView style={styles.settingInfo}>
-          <ThemedText style={styles.settingIcon}>💱</ThemedText>
           <ThemedText style={styles.settingLabel}>Currency</ThemedText>
         </ThemedView>
         <ThemedText style={styles.settingValue}>
