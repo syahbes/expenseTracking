@@ -180,6 +180,7 @@ const createStyles = (cardBackgroundColor: string, textColor: string, tintColor:
     },
     filterRow: {
       marginTop: 15,
+      backgroundColor: 'transparent',
     },
     filterLabel: {
       fontSize: 14,
@@ -219,6 +220,7 @@ const createStyles = (cardBackgroundColor: string, textColor: string, tintColor:
     dateRangeContainer: {
       flexDirection: 'row',
       gap: 10,
+      backgroundColor: 'transparent',
     },
     dateButton: {
       flex: 1,

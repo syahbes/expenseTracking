@@ -5,6 +5,7 @@ import { IconSymbol } from '@/components/ui/IconSymbol';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { Category } from '@/types/settings';
 import { Transaction } from '@/types/transaction';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import React from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
@@ -54,11 +55,16 @@ export const TransactionItem: React.FC<TransactionItemProps> = ({
 
   const getPaymentMethodIcon = (method: string) => {
     switch (method) {
-      case 'credit_card': return '💳';
-      case 'bank_transfer': return '🏦';
-      case 'atm_withdrawal': return '🏧';
-      case 'cash': return '💵';
-      default: return '💳';
+      case 'credit_card':
+        return <MaterialCommunityIcons name="credit-card" size={16} color={textColor} />;
+      case 'bank_transfer':
+        return <MaterialCommunityIcons name="bank-transfer" size={16} color={textColor} />;
+      case 'atm_withdrawal':
+        return <MaterialCommunityIcons name="projector-screen-variant-outline" size={16} color={textColor} />;
+      case 'cash':
+        return <MaterialCommunityIcons name="cash" size={16} color={textColor} />;
+      default:
+        return <MaterialCommunityIcons name="credit-card-outline" size={16} color={textColor} />;
     }
   };
 

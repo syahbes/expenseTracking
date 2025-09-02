@@ -9,10 +9,10 @@ import { useTransactions } from '@/hooks/useTransactions';
 import { useFocusEffect } from '@react-navigation/native';
 import React, { useCallback } from 'react';
 import { StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function TransactionsScreen() {
   const {
-    transactions,
     filteredTransactions,
     categories,
     monthlyStats,
@@ -46,6 +46,7 @@ export default function TransactionsScreen() {
   }
 
   return (
+       <SafeAreaView style={styles.container} edges={['top']}>
     <ThemedView style={styles.container}>
       <ThemedView style={styles.content}>
         {/* Dynamic Monthly Summary - now shows stats based on filtered results */}
@@ -92,6 +93,7 @@ export default function TransactionsScreen() {
         onTransactionUpdated={handleTransactionUpdated}
       />
     </ThemedView>
+    </SafeAreaView>
   );
 }
 
