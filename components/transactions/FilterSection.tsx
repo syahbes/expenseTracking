@@ -4,6 +4,7 @@ import { ThemedView } from '@/components/ThemedView';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { Category } from '@/types/settings';
+import { formatDateToDDMMYYYY } from '@/utils/dateFormatter';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import React, { useState } from 'react';
 import { Platform, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
@@ -37,7 +38,7 @@ export const FilterSection: React.FC<FilterSectionProps> = ({
   const styles = createStyles(cardBackgroundColor, textColor, tintColor);
 
   const formatDate = (date: Date | null) => {
-    return date ? date.toLocaleDateString() : 'Select Date';
+    return date ? formatDateToDDMMYYYY(date) : 'Select Date';
   };
 
   const hasActiveFilters = selectedCategoryId !== null || startDate !== null || endDate !== null;

@@ -1,6 +1,12 @@
 // utils/transactionParser.ts
 import { ParsedTransaction } from '@/types/transaction';
 
+// Helper function to capitalize first letter only
+const capitalizeFirstLetter = (str: string): string => {
+  if (!str) return str;
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+};
+
 export const parseTransactionText = (text: string): ParsedTransaction => {
   const parsed: ParsedTransaction = {};
 
@@ -97,7 +103,7 @@ export const parseTransactionText = (text: string): ParsedTransaction => {
   }
 
   if (description) {
-    parsed.description = description;
+    parsed.description = capitalizeFirstLetter(description);
   }
 
   return parsed;

@@ -11,6 +11,7 @@ import { updateTransaction } from '@/database/transactionService';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { Category } from '@/types/settings';
 import { NewTransaction, PaymentMethod, Transaction, TransactionType } from '@/types/transaction';
+import { formatDateToDDMMYYYY } from '@/utils/dateFormatter';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -98,7 +99,7 @@ export const EditTransactionModal: React.FC<EditTransactionModalProps> = ({ visi
     }
   };
 
-  const formatDate = (date: Date) => date.toLocaleDateString();
+  const formatDate = (date: Date) => formatDateToDDMMYYYY(date);
   const formatTime = (time: Date) => time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
   if (!transaction) return null;

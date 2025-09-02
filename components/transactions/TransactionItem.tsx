@@ -5,6 +5,7 @@ import { IconSymbol } from '@/components/ui/IconSymbol';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { Category } from '@/types/settings';
 import { Transaction } from '@/types/transaction';
+import { formatDateToDDMMYYYY } from '@/utils/dateFormatter';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import React from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
@@ -44,12 +45,8 @@ export const TransactionItem: React.FC<TransactionItemProps> = ({
     } else if (transactionDate.toDateString() === yesterday.toDateString()) {
       dateStr = 'Yesterday';
     } else {
-      dateStr = transactionDate.toLocaleDateString('en-US', { 
-        month: 'short', 
-        day: 'numeric' 
-      });
+      dateStr = formatDateToDDMMYYYY(transactionDate);
     }
-
     return `${dateStr} • ${time}`;
   };
 

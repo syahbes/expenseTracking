@@ -2,10 +2,11 @@ import { createStyles } from '@/components/addTransaction/styles';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useThemeColor } from '@/hooks/useThemeColor';
+import { formatDateToDDMMYYYY } from '@/utils/dateFormatter';
+import AntDesign from '@expo/vector-icons/AntDesign';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import React, { useState } from 'react';
 import { TouchableOpacity } from 'react-native';
-import AntDesign from '@expo/vector-icons/AntDesign';
 
 export default function DateTimePickerSection({
   date,
@@ -29,7 +30,7 @@ export default function DateTimePickerSection({
   );
   const iconColor = useThemeColor({}, 'text');
 
-  const formatDate = (d: Date) => d.toLocaleDateString();
+  const formatDate = (d: Date) => formatDateToDDMMYYYY(d);
   const formatTime = (d: Date) => d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
   return (

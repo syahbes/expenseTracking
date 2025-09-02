@@ -13,8 +13,8 @@ export const Colors = {
   },
   dark: {
     text: '#ECEDEE',
-    background: '#383838',
-    cardBackgroundColor: '#4A4A4A',
+    background: '#171422',
+    cardBackgroundColor: '#242231',    
     tint: tintColorDark,
     icon: '#9BA1A6',
     tabIconDefault: '#9BA1A6',
@@ -22,5 +22,7 @@ export const Colors = {
   },
 };
 
-// background: '#171422',
-// cardBackgroundColor: '#242231',
+
+
+// background: '#383838',
+    // cardBackgroundColor: '#4A4A4A',

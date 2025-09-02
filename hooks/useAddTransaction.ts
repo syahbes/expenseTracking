@@ -107,7 +107,7 @@ export function useAddTransaction() {
         },
       ]);
 
-      console.log('Transaction saved successfully:', newTransaction); // Debug log
+      // console.log('Transaction saved successfully:', newTransaction); // Debug log
     } catch (error) {
       console.error('Save error:', error);
       Alert.alert('Error', 'Failed to save transaction. Please try again.');

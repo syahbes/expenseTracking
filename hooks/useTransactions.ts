@@ -4,6 +4,7 @@ import { initializeDatabase } from '@/database/database';
 import { deleteTransaction, getTransactions } from '@/database/transactionService';
 import { Category } from '@/types/settings';
 import { Transaction } from '@/types/transaction';
+import { formatDateToDDMMYYYY } from '@/utils/dateFormatter';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Alert } from 'react-native';
 
@@ -57,8 +58,8 @@ export function useTransactions() {
     try {
       const [transactionsData, categoriesData] = await Promise.all([getTransactions(), loadCategories()]);
 
-      console.log('Loaded transactions:', transactionsData.length);
-      console.log('Loaded categories:', categoriesData.length);
+      // console.log('Loaded transactions:', transactionsData.length);
+      // console.log('Loaded categories:', categoriesData.length);
 
       setTransactions(transactionsData);
       setCategories(categoriesData);
@@ -76,7 +77,7 @@ export function useTransactions() {
 
   // Filter transactions based on current filters
   const filteredTransactions = useMemo(() => {
-    console.log('Filtering transactions. Total:', transactions.length);
+    // console.log('Filtering transactions. Total:', transactions.length);
 
     const filtered = transactions.filter((transaction) => {
       // Search filter
@@ -112,7 +113,7 @@ export function useTransactions() {
       return true;
     });
 
-    console.log('Filtered transactions:', filtered.length);
+    // console.log('Filtered transactions:', filtered.length);
     return filtered;
   }, [transactions, filters]);
 
@@ -148,17 +149,17 @@ export function useTransactions() {
     }
 
     if (filters.startDate && filters.endDate) {
-      // Both dates selected
-      const start = filters.startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-      const end = filters.endDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      // Both dates selected - use DD/MM format
+      const start = formatDateToDDMMYYYY(filters.startDate);
+      const end = formatDateToDDMMYYYY(filters.endDate);
       return `${start} - ${end}`;
     } else if (filters.startDate) {
       // Only start date
-      const start = filters.startDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+      const start = formatDateToDDMMYYYY(filters.startDate);
       return `From ${start}`;
     } else if (filters.endDate) {
       // Only end date
-      const end = filters.endDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+      const end = formatDateToDDMMYYYY(filters.endDate);
       return `Until ${end}`;
     } else {
       // Other filters (search, category) - show "Filtered Results"
