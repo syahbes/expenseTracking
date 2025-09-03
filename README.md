@@ -14,7 +14,7 @@ This app is **open source** — feel free to fork it or open a PR.
 ---
 ## ScreenShots
 
-<img width="1080" height="2424" alt="Screenshot_1756871486" src="https://github.com/user-attachments/assets/c78c1f6c-37d5-4b2a-a5e0-ce70f62a7519" />
+<img width="300" alt="Screenshot_1756871486" src="https://github.com/user-attachments/assets/c78c1f6c-37d5-4b2a-a5e0-ce70f62a7519" />
 <img width="1080" height="2424" alt="Screenshot_1756871528" src="https://github.com/user-attachments/assets/cc705196-1a06-4dc2-b5aa-8ca6c621141e" />
 <img width="1080" height="2424" alt="Screenshot_1756871549" src="https://github.com/user-attachments/assets/86a29fdd-1c8a-42cf-a940-85b4bfcb3a74" />
 <img width="1080" height="2424" alt="Screenshot_1756871562" src="https://github.com/user-attachments/assets/6b6e35be-7356-4d2c-b991-43ca93b79f62" />
