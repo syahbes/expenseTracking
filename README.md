@@ -53,6 +53,14 @@ I just wanted something **lightweight, private, and straightforward**.
 
 When there’s a need… you build your own. 🚀
 
+---
+
+## Download
+Find the latest version in the [releases section](https://github.com/syahbes/expenseTracking/releases)
+
+
+---
+
 feel free to send me mail to syahbes@gmail.com
 
 Shlomi
